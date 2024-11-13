@@ -25,7 +25,23 @@ public abstract class Usuario {
     public void setRUN(String RUN) {
         this.RUN = RUN;
     }
-
+    /*
+    //mejorar
+    public void ValidarRun(){
+        int contador;
+        contador=2;
+        Acumulador=0;
+        while (RUN!=0){
+            Multiplo=(RUN%10)*contador;
+            Acumulador=Acumulador+Multiplo;
+            RUN=RUN/10;
+            contador=contador++;
+            if(contador==8){
+                contador=2;
+            }
+        }
+    }
+    */
     public String getNombreCompleto() {
         return nombreCompleto;
     }
