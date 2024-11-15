@@ -10,10 +10,11 @@ import validator.UsuarioValidador;
 
 public class UsuarioCLIDelegate extends BaseCLI {
 
-  private final UsuarioValidador validador = new UsuarioValidador();
+  private final UsuarioValidador validador;
   private final List<Usuario> listaUsuarios;
 
   public UsuarioCLIDelegate(List<Usuario> listaUsuarios) {
+    validador = new UsuarioValidador(listaUsuarios);
     this.listaUsuarios = listaUsuarios;
   }
 
@@ -27,7 +28,7 @@ public class UsuarioCLIDelegate extends BaseCLI {
         case "listar" -> listar();
         case "eliminar" -> eliminar();
         default -> {
-          System.out.println("Opcion no valida");
+          br("Opcion no valida");
           isRunning = false;
         }
       }
