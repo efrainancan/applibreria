@@ -12,7 +12,7 @@ public class BaseCLI {
 
   protected String readString() throws IOException {
     var br = new BufferedReader(new InputStreamReader(System.in));
-    return br.readLine();
+    return br.readLine().trim();
   }
 
   protected String prompt(String value) {

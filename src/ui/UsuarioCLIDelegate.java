@@ -1,21 +1,18 @@
 package ui;
 
-import java.util.List;
-
 import model.Docente;
 import model.Estudiante;
-import model.Usuario;
 import model.enums.TipoUsuario;
+import store.StoreManager;
 import validator.UsuarioValidador;
 
 public class UsuarioCLIDelegate extends BaseCLI {
 
+  private static final StoreManager storeManager = StoreManager.getInstance();
   private final UsuarioValidador validador;
-  private final List<Usuario> listaUsuarios;
 
-  public UsuarioCLIDelegate(List<Usuario> listaUsuarios) {
-    validador = new UsuarioValidador(listaUsuarios);
-    this.listaUsuarios = listaUsuarios;
+  public UsuarioCLIDelegate() {
+    validador = new UsuarioValidador();
   }
 
   public void run() {
@@ -25,6 +22,7 @@ public class UsuarioCLIDelegate extends BaseCLI {
       switch (prompt.toLowerCase()) {
         case "salir" -> isRunning = false;
         case "agregar" -> agregar();
+        case "editar" -> editar();
         case "listar" -> listar();
         case "eliminar" -> eliminar();
         default -> {
@@ -42,13 +40,9 @@ public class UsuarioCLIDelegate extends BaseCLI {
       run = prompt("Run no valido, ingrese nuevamente: ");
     }
 
-    String nombre = prompt("Nombre completo: ");
-    String genero = prompt("Genero (Valores validos son " + validador.getValidGenders() + "): ");
-    while (!validador.isGenderOk(genero)) {
-      genero = prompt("Genero ingreado no valido, ingrese nuevamente: ");
-    }
-
-    String tipoUsuario = prompt("Selecctione el tipo de usuario (Estudiante, Docente): ");
+    var nombre = prompt("Nombre completo: ");
+    var genero = promptGeneroValido();
+    var tipoUsuario = prompt("Selecctione el tipo de usuario (Estudiante, Docente): ");
     while (!validador.esTipoUsuarioPermitido(tipoUsuario)) {
       tipoUsuario = prompt("Selecctione el tipo de usuario (Estudiante, Docente): ");
     }
@@ -56,27 +50,52 @@ public class UsuarioCLIDelegate extends BaseCLI {
     var tipoUsuarioEnum = TipoUsuario.fromCode(tipoUsuario);
     if (tipoUsuarioEnum.esEstudiante()) {
       String carrera = prompt("Carrera: ");
-      listaUsuarios.add(new Estudiante(run, nombre, genero.charAt(0), carrera));
+      storeManager.add(new Estudiante(run, nombre, genero, carrera));
     } else {
       String profesion = prompt("Profesion: ");
       String gradoAcademico = prompt("Grado Academico: ");
-      listaUsuarios.add(new Docente(run, nombre, genero.charAt(0), profesion, gradoAcademico));
+      storeManager.add(new Docente(run, nombre, genero, profesion, gradoAcademico));
     }
   }
 
+  public void editar() {
+    System.out.println("Ingrese datos del usuario");
+    String run = prompt("Ingrese RUN: ");
+    var usuario = validador.existeUsuario(run);
+    if (usuario == null) {
+      return;
+    }
+
+    usuario.setNombreCompleto(prompt("Nombre completo: "));
+    usuario.setGenero(promptGeneroValido());
+    br("Usuario actualizado con exito");
+  }
+
   public void listar() {
+    var listaUsuarios = storeManager.getUsuarioStore();
     System.out.println("Hay " + listaUsuarios.size() + " estudiantes en la lista");
     listaUsuarios.forEach(System.out::println);
     br();
   }
 
   public void eliminar() {
-    String rut = prompt("Ingrese Rut de usuario a eliminar: ");
-    boolean wasRemoved = listaUsuarios.removeIf(u -> u.getRUN().equalsIgnoreCase(rut));
-    if (!wasRemoved) {
-      showError("usuario eliminado");
+    var run = prompt("Ingrese RUN de usuario a eliminar: ");
+    var usuario = validador.existeUsuario(run);
+    if (usuario == null) {
+      return;
     }
-    br();
+
+    if (storeManager.remove(usuario)) {
+      br("usuario eliminado");
+    }
+  }
+
+  private Character promptGeneroValido() {
+    String genero = prompt("Genero (Valores validos son " + validador.getValidGenders() + "): ");
+    while (!validador.isGenderOk(genero)) {
+      genero = prompt("Genero ingreado no valido, ingrese nuevamente: ");
+    }
+    return genero.charAt(0);
   }
 
 }

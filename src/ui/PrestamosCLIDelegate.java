@@ -1,34 +1,33 @@
 package ui;
 
-import java.time.Instant;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
 
-import model.Libro;
 import model.Prestamo;
 import model.Usuario;
+import store.StoreManager;
 import validator.PrestamoValidator;
 import validator.UsuarioValidador;
 
 public class PrestamosCLIDelegate extends BaseCLI {
 
-  private final List<Prestamo> prestamoList;
+  private static final StoreManager storeManager = StoreManager.getInstance();
+
   private final PrestamoValidator validator;
   private final UsuarioValidador usuarioValidador;
 
-  public PrestamosCLIDelegate(List<Libro> libroList, List<Usuario> listaUsuarios, List<Prestamo> prestamoList) {
-    this.prestamoList = prestamoList;
-    validator = new PrestamoValidator(libroList, listaUsuarios);
-    usuarioValidador = new UsuarioValidador(listaUsuarios);
+  public PrestamosCLIDelegate() {
+    validator = new PrestamoValidator();
+    usuarioValidador = new UsuarioValidador();
   }
 
   public void run() {
     boolean isRunning = true;
     while (isRunning) {
-      var prompt = prompt("Que operacion desea realizar sobre prestamos (agregar, salir)");
+      var prompt = prompt("Que operacion desea realizar sobre prestamos (agregar, listar, salir)");
       switch (prompt.toLowerCase()) {
         case "salir" -> isRunning = false;
         case "agregar" -> agregarPrestamo();
+        case "listar" -> listar();
       }
     }
   }
@@ -41,7 +40,7 @@ public class PrestamosCLIDelegate extends BaseCLI {
     }
 
     var run = prompt("Ingrese RUN de usuario");
-    var usuario = usuarioValidador.validarUsuario(run);
+    var usuario = usuarioValidador.existeUsuario(run);
     if (usuario == null) {
       return;
     }
@@ -57,15 +56,21 @@ public class PrestamosCLIDelegate extends BaseCLI {
     }
 
     Prestamo prestamo = new Prestamo();
-    prestamo.setFechaPrestamo(Date.from(Instant.now()));
+    prestamo.setFechaPrestamo(LocalDate.now());
     prestamo.setUsuario(usuario);
     prestamo.setLibro(libro);
     prestamo.setDiasPrestamo(dias);
-    prestamoList.add(prestamo);
-
-    libro.setCantidadDisponible(libro.getCantidadDisponible() - 1);
-    usuario.setPrestamo(isbn);
+    storeManager.add(prestamo);
+    storeManager.agregarCantidadDisponible(libro, -1);
+    storeManager.prestarLibro(usuario, isbn);
     br("Libro prestado con exito");
+  }
+
+  public void listar() {
+    var prestamos = storeManager.getPrestamosStore();
+    System.out.println("Hay " + prestamos.size() + " prestamos reistrados");
+    prestamos.forEach(System.out::println);
+    br();
   }
 
 }

@@ -1,21 +1,14 @@
 package validator;
 
-import java.util.List;
-
 import model.Libro;
-import model.Usuario;
 import model.enums.TipoUsuario;
 
 public class PrestamoValidator {
 
-  private final List<Libro> libroList;
-  private final List<Usuario> usuarioList;
-  private LibroValidador libroValidador;
+  private final LibroValidador libroValidador;
 
-  public PrestamoValidator(List<Libro> libroList, List<Usuario> usuarioList) {
-    this.libroList = libroList;
-    this.usuarioList = usuarioList;
-    libroValidador = new LibroValidador(libroList);
+  public PrestamoValidator() {
+    libroValidador = new LibroValidador();
   }
 
   public Libro validarLibro(String isbn) {

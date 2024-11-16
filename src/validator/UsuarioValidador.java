@@ -1,27 +1,25 @@
 package validator;
 
-import java.util.List;
-
 import model.Usuario;
 import model.enums.TipoUsuario;
+import store.StoreManager;
 
 public class UsuarioValidador extends BasicValidator {
 
+  private static final StoreManager storeManager = StoreManager.getInstance();
   public final String[] allowed_genders = new String[] { "M", "F" };
 
-  private final List<Usuario> usuarioList;
-
-  public UsuarioValidador(List<Usuario> usuarioList) {
-    this.usuarioList = usuarioList;
-  }
-
-  public Usuario validarUsuario(String RUN) {
-    var usuario = usuarioList.stream().filter(e -> e.getRUN().equalsIgnoreCase(RUN)).findFirst();
-    if (usuario.isEmpty()) {
+  public Usuario existeUsuario(String RUN) {
+    if (!isBlank(RUN)) {
+      System.err.println("RUN ingresado esta vacio");
+      return null;
+    }
+    var usuarioOpt = storeManager.getUsuario(RUN);
+    if (usuarioOpt.isEmpty()) {
       System.err.println("RUN no existe");
       return null;
     }
-    return usuario.get();
+    return usuarioOpt.get();
   }
 
   public boolean isGenderOk(String gender) {
@@ -39,12 +37,10 @@ public class UsuarioValidador extends BasicValidator {
   public boolean validarRut(String rut) {
     boolean validacion = false;
     try {
-      rut = rut.toUpperCase();
-      rut = rut.replace(".", "");
-      rut = rut.replace("-", "");
-      int rutAux = Integer.parseInt(rut.substring(0, rut.length() - 1));
+      var tmpRut = rut.toUpperCase().replace(".", "").replace("-", "");
+      int rutAux = Integer.parseInt(tmpRut.substring(0, tmpRut.length() - 1));
 
-      char dv = rut.charAt(rut.length() - 1);
+      char dv = tmpRut.charAt(rut.length() - 1);
 
       int m = 0, s = 1;
       for (; rutAux != 0; rutAux /= 10) {

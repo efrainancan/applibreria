@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Prestamo {
 
@@ -8,7 +8,7 @@ public class Prestamo {
   private Libro libro;
   private Integer diasPrestamo;
   private Devolucion devolucion;
-  private Date fechaPrestamo;
+  private LocalDate fechaPrestamo;
 
   public Usuario getUsuario() {
     return usuario;
@@ -42,11 +42,11 @@ public class Prestamo {
     this.devolucion = devolucion;
   }
 
-  public Date getFechaPrestamo() {
+  public LocalDate getFechaPrestamo() {
     return fechaPrestamo;
   }
 
-  public void setFechaPrestamo(Date fechaPrestamo) {
+  public void setFechaPrestamo(LocalDate fechaPrestamo) {
     this.fechaPrestamo = fechaPrestamo;
   }
 

@@ -1,17 +1,6 @@
 package ui;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import model.Libro;
-import model.Prestamo;
-import model.Usuario;
-
 public class CLIHelperFacade extends BaseCLI {
-
-  private final List<Libro> libroList = new LinkedList<>();
-  private final List<Usuario> listaUsuario = new LinkedList<>();
-  private final List<Prestamo> prestamoList = new LinkedList<>();
 
   private final LibroCLIDelegate libroCLIHelper;
   private final UsuarioCLIDelegate estudianteCLIHelper;
@@ -19,10 +8,10 @@ public class CLIHelperFacade extends BaseCLI {
   private final DevolucionCLIDelegate devolucionCLIDelegate;
 
   public CLIHelperFacade() {
-    libroCLIHelper = new LibroCLIDelegate(libroList);
-    estudianteCLIHelper = new UsuarioCLIDelegate(listaUsuario);
-    prestamosCLIHelper = new PrestamosCLIDelegate(libroList, listaUsuario, prestamoList);
-    devolucionCLIDelegate = new DevolucionCLIDelegate(libroList, listaUsuario);
+    libroCLIHelper = new LibroCLIDelegate();
+    estudianteCLIHelper = new UsuarioCLIDelegate();
+    prestamosCLIHelper = new PrestamosCLIDelegate();
+    devolucionCLIDelegate = new DevolucionCLIDelegate();
   }
 
   public void run() {
