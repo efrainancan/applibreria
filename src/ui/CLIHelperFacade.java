@@ -15,7 +15,6 @@ public class CLIHelperFacade extends BaseCLI {
   }
 
   public void run() {
-    System.out.println("===================================");
     boolean isRunning = true;
     while (isRunning) {
       switch (prompt("Que entidad quiere operar? (devolucion, usuario, libro, prestamo): ").toUpperCase()) {
@@ -24,7 +23,7 @@ public class CLIHelperFacade extends BaseCLI {
         case "PRESTAMO" -> prestamosCLIHelper.run();
         case "DEVOLUCION" -> devolucionCLIDelegate.run();
         default -> {
-          System.out.println("Opcion no valida");
+          br("Opcion no valida");
           isRunning = false;
         }
       }

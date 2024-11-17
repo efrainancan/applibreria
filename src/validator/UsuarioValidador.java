@@ -10,7 +10,7 @@ public class UsuarioValidador extends BasicValidator {
   public final String[] allowed_genders = new String[] { "M", "F" };
 
   public Usuario existeUsuario(String RUN) {
-    if (!isBlank(RUN)) {
+    if (isBlank(RUN)) {
       System.err.println("RUN ingresado esta vacio");
       return null;
     }

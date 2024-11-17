@@ -57,7 +57,7 @@ public class DevolucionCLIDelegate extends BaseCLI {
 
     if (today.isAfter(dueDate)) {
       var multa = dueDate.until(today).getDays() * FINE_BY_DAY;
-      System.out.println("Se debe cancelar una multta de: " + multa);
+      System.out.println("Se debe cancelar una multa de: " + multa);
     }
 
     storeManager.agregarCantidadDisponible(libro, 1);

@@ -23,7 +23,7 @@ public class PrestamosCLIDelegate extends BaseCLI {
   public void run() {
     boolean isRunning = true;
     while (isRunning) {
-      var prompt = prompt("Que operacion desea realizar sobre prestamos (agregar, listar, salir)");
+      var prompt = prompt("Que operacion desea realizar sobre prestamos (agregar, listar, salir): ");
       switch (prompt.toLowerCase()) {
         case "salir" -> isRunning = false;
         case "agregar" -> agregarPrestamo();
@@ -39,14 +39,14 @@ public class PrestamosCLIDelegate extends BaseCLI {
       return;
     }
 
-    var run = prompt("Ingrese RUN de usuario");
+    var run = prompt("Ingrese RUN de usuario: ");
     var usuario = usuarioValidador.existeUsuario(run);
     if (usuario == null) {
       return;
     }
 
     if (!Usuario.PRESTAMO_OK.equals(usuario.getPrestamo())) {
-      showError("Usuario ya tiene un prestamo realizado");
+      showError("Usuario ya tiene un prestamo realizado.");
       return;
     }
 
@@ -63,12 +63,12 @@ public class PrestamosCLIDelegate extends BaseCLI {
     storeManager.add(prestamo);
     storeManager.agregarCantidadDisponible(libro, -1);
     storeManager.prestarLibro(usuario, isbn);
-    br("Libro prestado con exito");
+    br("Libro prestado con exito.");
   }
 
   public void listar() {
     var prestamos = storeManager.getPrestamosStore();
-    System.out.println("Hay " + prestamos.size() + " prestamos reistrados");
+    System.out.println("Hay " + prestamos.size() + " prestamos registrados");
     prestamos.forEach(System.out::println);
     br();
   }

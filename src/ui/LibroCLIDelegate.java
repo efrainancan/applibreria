@@ -43,8 +43,7 @@ public class LibroCLIDelegate extends BaseCLI {
     System.out.println("Ingrese datos de los libros");
     String isbn = prompt("ISBN: ");
 
-    if (storeManager.existsLibro(isbn)) {
-      System.err.println("Ya existe libro para el ISBN ingresado");
+    if (!libroValidador.checkLibroNoExiste(isbn)) {
       return;
     }
 

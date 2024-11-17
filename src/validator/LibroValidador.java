@@ -3,11 +3,23 @@ package validator;
 import model.Libro;
 import store.StoreManager;
 
-public class LibroValidador {
+public class LibroValidador extends BasicValidator {
 
   private static final StoreManager storeManager = StoreManager.getInstance();
 
+  public boolean checkLibroNoExiste(String isbn) {
+    if (isBlank(isbn)) {
+      System.out.println("ISBN no puede estar vacio");
+      return false;
+    }
+    return storeManager.getLibro(isbn).isEmpty();
+  }
+
   public Libro existe(String isbn) {
+    if (isBlank(isbn)) {
+      System.out.println("ISBN no puede estar vacio");
+      return null;
+    }
     var libroOptional = storeManager.getLibro(isbn);
     if (libroOptional.isEmpty()) {
       System.err.println("Libro no existe con ISBN: " + isbn);
