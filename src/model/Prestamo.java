@@ -50,4 +50,8 @@ public class Prestamo {
     this.fechaPrestamo = fechaPrestamo;
   }
 
+  public String generarTarjetPrestamo() {
+    return "Prestamos para usuario: " + usuario.getRUN() + "Del libro: " + libro.getISBN();
+  }
+
 }

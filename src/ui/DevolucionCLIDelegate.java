@@ -2,6 +2,7 @@ package ui;
 
 import java.time.LocalDate;
 
+import model.Devolucion;
 import model.Usuario;
 import store.StoreManager;
 import validator.LibroValidador;
@@ -50,16 +51,17 @@ public class DevolucionCLIDelegate extends BaseCLI {
       return;
     }
 
-    var diasPrestamo = prestamo.get().getDiasPrestamo();
-    var fechaPrestamo = prestamo.get().getFechaPrestamo();
-    var dueDate = fechaPrestamo.plusDays(diasPrestamo);
-    var today = LocalDate.now();
-
-    if (today.isAfter(dueDate)) {
-      var multa = dueDate.until(today).getDays() * FINE_BY_DAY;
+    var devolucion = new Devolucion();
+    devolucion.setUsuario(usuario);
+    devolucion.setFechaDevolucion(LocalDate.now());
+    devolucion.setLibro(libro);
+    devolucion.setPrestamo(prestamo.get());
+    var multa = devolucion.calcularPrestamo(FINE_BY_DAY);
+    if (multa > 0) {
       System.out.println("Se debe cancelar una multa de: " + multa);
     }
 
+    storeManager.add(devolucion);
     storeManager.agregarCantidadDisponible(libro, 1);
     storeManager.prestarLibro(usuario, Usuario.PRESTAMO_OK);
     br("devolucion exitosa.");

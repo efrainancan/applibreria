@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import model.Devolucion;
 import model.Libro;
 import model.Prestamo;
 import model.Usuario;
@@ -15,11 +16,13 @@ public class StoreManager {
   private final List<Usuario> usuarioStore;
   private final List<Libro> libroStore;
   private final List<Prestamo> prestamoStore;
+  private final List<Devolucion> devolucionStore;
 
   private StoreManager() {
     usuarioStore = new LinkedList<>();
     prestamoStore = new LinkedList<>();
     libroStore = new LinkedList<>();
+    devolucionStore = new LinkedList<>();
   }
 
   public static StoreManager getInstance() {
@@ -57,6 +60,10 @@ public class StoreManager {
       throw new EntityAlreadyExistsException("Libro con ISBN ya existe: " + libro.getISBN());
     }
     libroStore.add(libro);
+  }
+
+  public void add(Devolucion devolucion) {
+    devolucionStore.add(devolucion);
   }
 
   public void add(Prestamo prestamo) {

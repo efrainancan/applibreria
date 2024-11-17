@@ -66,6 +66,14 @@ public class Libro {
     this.imagen = imagen;
   }
 
+  public void actualizarCantidadDisponible(int cantidadDisponible) {
+    setCantidadDisponible(cantidadDisponible);
+  }
+
+  public void actualizarCantidadTotal(int cantidadTotal) {
+    setCantidadTotal(cantidadTotal);
+  }
+
   @Override
   public String toString() {
     return "Libro {" + "ISBN='" + ISBN + '\'' + ", titulo='" + titulo + '\'' + ", author='" + author + '\'' + ", cantidadTotal=" + cantidadTotal + ", cantidadDisponible=" + cantidadDisponible + ", imagen='" + imagen + '\'' + '}';

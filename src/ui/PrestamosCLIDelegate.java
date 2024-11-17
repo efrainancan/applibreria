@@ -63,6 +63,7 @@ public class PrestamosCLIDelegate extends BaseCLI {
     storeManager.add(prestamo);
     storeManager.agregarCantidadDisponible(libro, -1);
     storeManager.prestarLibro(usuario, isbn);
+    System.out.println(prestamo.generarTarjetPrestamo());
     br("Libro prestado con exito.");
   }
 
